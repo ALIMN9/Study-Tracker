@@ -35,11 +35,17 @@ public class Main {
                     String name = scanner.nextLine();
                     System.out.print("Enter Subject ID: ");
                     String id = scanner.nextLine();
-                    tracker.addSubject(name, id);
-                    System.out.println("Subject added!");
+                    AddSubjectResult result = tracker.addSubject(name, id);
+                    if (result == AddSubjectResult.INVALID) {
+                        System.out.println("Invalid name or ID");
+                    } else if (result == AddSubjectResult.ADDED) {
+                        System.out.println("Subject added!");
+                    } else if (result==AddSubjectResult.DUPLICATE){
+                        System.out.println("Subject exists already!");
+                    }
                 }
                 case 2 -> {
-                    for(Subject subject: tracker.getSubjects()){
+                    for(Subject subject: tracker.getSubjects()) {
                         System.out.println("Subject Name: " + subject.getName());
                         System.out.println("Subject ID: " + subject.getId());
                     }
@@ -67,7 +73,7 @@ public class Main {
                     }
                 }
                 case 4 -> {
-                    for(StudySession session: tracker.getStudySessions()){
+                    for(StudySession session: tracker.getStudySessions()) {
                         System.out.println("Subject Name: " + session.getSubject().getName());
                         System.out.println("Subject ID: " + session.getSubject().getId());
                         System.out.println("Date: " + session.getDate());
@@ -77,7 +83,7 @@ public class Main {
                 case 5 -> {
                     System.out.print("Enter Subject ID: ");
                     String id = scanner.nextLine();
-                    if (tracker.searchSubject(id)) {
+                    if (tracker.searchSubject(id) != null) {
                         System.out.println("Subject exists!");
                     } else {
                         System.out.println("Subject doesn't exist!");

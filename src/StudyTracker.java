@@ -5,37 +5,43 @@ import java.util.List;
 
 public class StudyTracker {
 
-    private final ArrayList<Subject> subjects = new ArrayList<>();
-    private final ArrayList<StudySession> studySessions = new ArrayList<>();
+    private final List<Subject> subjects = new ArrayList<>();
+    private final List<StudySession> studySessions = new ArrayList<>();
 
-    public List<Subject> getSubjects(){
+    public List<Subject> getSubjects() {
         return Collections.unmodifiableList(subjects);
     }
-    public List<StudySession> getStudySessions(){
+    public List<StudySession> getStudySessions() {
         return Collections.unmodifiableList(studySessions);
     }
 
-    public void addSubject(String name, String id) {
-        subjects.add(new Subject(name, id));
+    public AddSubjectResult addSubject(String name, String id) {
+        if(name.isBlank() || id.isBlank()){
+            return AddSubjectResult.INVALID;
+        }
+        if(searchSubject(id)==null) {
+            subjects.add(new Subject(name, id));
+            return AddSubjectResult.ADDED;
+        }
+        return AddSubjectResult.DUPLICATE;
     }
 
     public boolean addStudySession(String id, int duration) {
-        for (Subject subject : subjects) {
-            if (subject.getId().equals(id)) {
+        Subject subject = searchSubject(id);
+            if (subject != null){
                 studySessions.add(new StudySession(subject, duration, LocalDate.now()));
                 return true;
             }
-        }
         return false;
     }
 
-    public boolean searchSubject(String id) {
+    public Subject searchSubject(String id) {
         for (Subject subject : subjects) {
             if (subject.getId().equals(id)) {
-                return true;
+                return subject;
             }
         }
-        return false;
+        return null;
     }
 
     public int getTotalStudyTime() {
