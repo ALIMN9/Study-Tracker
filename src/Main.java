@@ -36,12 +36,10 @@ public class Main {
                     System.out.print("Enter Subject ID: ");
                     String id = scanner.nextLine();
                     AddSubjectResult result = tracker.addSubject(name, id);
-                    if (result == AddSubjectResult.INVALID) {
-                        System.out.println("Invalid name or ID");
-                    } else if (result == AddSubjectResult.ADDED) {
-                        System.out.println("Subject added!");
-                    } else if (result==AddSubjectResult.DUPLICATE){
-                        System.out.println("Subject exists already!");
+                    switch (result) {
+                        case INVALID -> System.out.println("Invalid name or ID");
+                        case ADDED -> System.out.println("Subject added!");
+                        case DUPLICATE -> System.out.println("Subject exists already!");
                     }
                 }
                 case 2 -> {
@@ -51,21 +49,17 @@ public class Main {
                     }
                 }
                 case 3 -> {
+                    try{
                     System.out.print("Enter Subject ID: ");
                     String id = scanner.nextLine();
                     System.out.print("Duration: ");
-                    try {
-                        int duration = scanner.nextInt();
-                        scanner.nextLine();
-                        if (duration < 5) {
-                            System.out.println("Duration must be at least 5 minutes!");
-                            break;
-                        }
-                        boolean added = tracker.addStudySession(id, duration);
-                        if (added) {
-                            System.out.println("Session added!");
-                        } else {
-                            System.out.println("Unexisting Subject!");
+                    int duration = scanner.nextInt();
+                    scanner.nextLine();
+                    AddStudySessionResult result = tracker.addStudySession(id, duration);
+                        switch (result) {
+                            case  SESSION_ADDED-> System.out.println("Session added!");
+                            case SUBJECT_NOT_FOUND -> System.out.println("Subject Does not Exist");
+                            case  INVALID_DURATION-> System.out.println("Duration must be at least 5 minutes!");
                         }
                     } catch (InputMismatchException e) {
                         System.out.println("Invalid input! Please enter a number.");

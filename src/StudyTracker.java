@@ -26,13 +26,16 @@ public class StudyTracker {
         return AddSubjectResult.DUPLICATE;
     }
 
-    public boolean addStudySession(String id, int duration) {
+    public AddStudySessionResult addStudySession(String id, int duration) {
         Subject subject = searchSubject(id);
-            if (subject != null){
+            if (subject != null && duration>=5){
                 studySessions.add(new StudySession(subject, duration, LocalDate.now()));
-                return true;
+                return AddStudySessionResult.SESSION_ADDED;
+            }else if(subject==null){
+                return AddStudySessionResult.SUBJECT_NOT_FOUND;
+            } else {
+                return AddStudySessionResult.INVALID_DURATION;
             }
-        return false;
     }
 
     public Subject searchSubject(String id) {
